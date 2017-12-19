@@ -17,7 +17,7 @@ func main() {
 	e.Static("/page", "page")
 	e.Static("/files", "files")
 
-	e.POST("/upload", handler.UploadFile)
+	e.POST("/upload", handler.UploadFile, handler.Filter)
 	e.POST("/upload/multi", handler.UploadMultipart, handler.Filter)
 
 	utils.Open(global.Host)
