@@ -1,16 +1,16 @@
 package main
 
 import (
-	"github.com/beewit/beekit/utils/convert"
-	"github.com/labstack/echo"
-	"github.com/beewit/file/handler"
 	"github.com/beewit/beekit/utils"
+	"github.com/beewit/beekit/utils/convert"
 	"github.com/beewit/file/global"
+	"github.com/beewit/file/handler"
+	"github.com/labstack/echo"
 )
 
 /**
-	文件上传服务器
- */
+文件上传服务器
+*/
 func main() {
 	e := echo.New()
 

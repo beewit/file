@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/beewit/beekit/utils/convert"
 	"github.com/labstack/echo"
-	"github.com/beewit/hive/global"
+	"github.com/beewit/file/global"
 	"github.com/beewit/beekit/utils"
 	"github.com/beewit/beekit/utils/enum"
 )

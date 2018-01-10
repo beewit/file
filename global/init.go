@@ -49,3 +49,11 @@ func ToInterfaceAccount(m interface{}) *Account {
 	}
 	return ToByteAccount(b)
 }
+
+func ToMapAccount(m map[string]interface{}) *Account {
+	b := convert.ToMapByte(m)
+	if b == nil {
+		return nil
+	}
+	return ToByteAccount(b)
+}

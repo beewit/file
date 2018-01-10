@@ -5,7 +5,6 @@ import (
 	"io"
 	"fmt"
 	"github.com/beewit/file/global"
-	"time"
 	"github.com/beewit/beekit/utils"
 	path2 "path"
 	"github.com/beewit/beekit/utils/convert"
@@ -20,6 +19,10 @@ var b float64 = 1024
 */
 func UploadFile(c echo.Context) error {
 	// Read form fields
+	acc, err := GetAccount(c)
+	if err != nil {
+		return utils.AuthFailNull(c)
+	}
 	//放置目录
 	dir := c.FormValue("dir")
 	// Source
@@ -50,7 +53,7 @@ func UploadFile(c echo.Context) error {
 
 	// Destination
 	fileName := convert.ToString(utils.ID())
-	path := getPath(dir, fileName, ext)
+	path := getPath(dir, fileName, ext, acc)
 	dst, err := utils.CreateFile(path)
 	if err != nil {
 		return utils.ErrorNull(c, "创建文件失败")
@@ -86,8 +89,15 @@ func UploadFile(c echo.Context) error {
 
 func UploadMultipart(c echo.Context) error {
 	// Read form fields
+	acc, err := GetAccount(c)
+	if err != nil {
+		return utils.AuthFailNull(c)
+	}
 	//放置目录
 	dir := c.FormValue("dir")
+	if dir == "" {
+		dir = "default"
+	}
 	//------------
 	// Read files
 	//------------
@@ -125,7 +135,7 @@ func UploadMultipart(c echo.Context) error {
 		}
 
 		fileName := convert.ToString(utils.ID())
-		path := getPath(dir, fileName, ext)
+		path := getPath(dir, fileName, ext, acc)
 		dst, err := utils.CreateFile(path)
 		if err != nil {
 			return utils.ErrorNull(c, "创建文件失败")
@@ -168,9 +178,10 @@ func UploadMultipart(c echo.Context) error {
 	return utils.SuccessNullMsg(c, newFiles)
 }
 
-func getPath(dir, fileName, suffix string) string {
-	now := time.Now()
-	return fmt.Sprintf("%s/%s/%d/%d/%d/%s%s", global.FilesPath, dir, now.Year(), now.Month(), now.Day(), fileName, suffix)
+func getPath(dir, fileName, suffix string, acc *global.Account) string {
+	return fmt.Sprintf("%s/%s/%d/%s%s", global.FilesPath, dir, acc.ID, fileName, suffix)
+	//now := time.Now()
+	//return fmt.Sprintf("%s/%s/%d/%d/%d/%s%s", global.FilesPath, dir, now.Year(), now.Month(), now.Day(), fileName, suffix)
 }
 
 func getUrl(path string) string {
