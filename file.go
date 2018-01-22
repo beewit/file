@@ -16,6 +16,7 @@ func main() {
 
 	e.Static("/page", "page")
 	e.Static("/files", "files")
+	e.File("/.well-known/pki-validation/fileauth.txt", "fileauth.txt")
 
 	e.POST("/upload", handler.UploadFile, handler.Filter)
 	e.POST("/upload/multi", handler.UploadMultipart, handler.Filter)
