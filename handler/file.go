@@ -64,6 +64,7 @@ func UploadFile(c echo.Context) error {
 	if _, err = dst.Write(buf); err != nil {
 		return utils.ErrorNull(c, "保存文件失败")
 	}
+	path = "/" + path
 	go func() {
 		_, err = global.DB.InsertMap("file_log", map[string]interface{}{
 			"id":      utils.ID(),
@@ -146,6 +147,7 @@ func UploadMultipart(c echo.Context) error {
 		if _, err = io.Copy(dst, src); err != nil {
 			return utils.ErrorNull(c, "保存文件失败")
 		}
+		path = "/" + path
 		newFiles = append(newFiles, map[string]interface{}{
 			"id":   fileName,
 			"size": file.Size,
@@ -179,9 +181,10 @@ func UploadMultipart(c echo.Context) error {
 }
 
 func getPath(dir, fileName, suffix string, acc *global.Account) string {
+	if dir == "" {
+		dir = "file"
+	}
 	return fmt.Sprintf("%s/%s/%d/%s%s", global.FilesPath, dir, acc.ID, fileName, suffix)
-	//now := time.Now()
-	//return fmt.Sprintf("%s/%s/%d/%d/%d/%s%s", global.FilesPath, dir, now.Year(), now.Month(), now.Day(), fileName, suffix)
 }
 
 func getUrl(path string) string {
